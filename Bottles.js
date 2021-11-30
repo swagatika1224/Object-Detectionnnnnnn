@@ -1,5 +1,6 @@
 img = "";
 status = "";
+objects = [];
 
 function preload() {
 img = loadImage('Bottles.jpeg');
@@ -14,11 +15,19 @@ document.getElementById("status").innerHTML = "Status : Detecting Objects";
 
 function draw() {
 image(img, 0, 0, 640, 420);
-fill("#FF0000")
-text("Bottles", 45, 75);
+
+if(status != "") {
+for (i = 0; i < objects.length; i++) {
+document.getElementById("status").innerHTML = "Status : Object Detected";
+
+fill("#FF0000");
+percent = floor(objects[i].confidence * 100);
+text(objects[i].label + " " + percent + "%", objects[i].x, objects[i].y);
 noFill();
 stroke("#FF0000");
-rect(30, 60, 450, 350);
+rect(objects[i].x, objects[i].width, objects[i].height);
+  }
+ }
 }
 
 function modelLoaded() {
@@ -32,4 +41,5 @@ if (error) {
 console.log(error);
 }
 console.log(results);
+objects = results;
 }
